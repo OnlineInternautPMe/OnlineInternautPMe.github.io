@@ -36,4 +36,20 @@ kotlin {
     }
 }
 
+tasks.register<Copy>("deployToDocs") {
+    group = "distribution"
+    description = "Copies the web distribution to the root docs folder"
 
+    // 1. Define the source: the output of the production distribution task
+    val distributionTask = tasks.named("wasmJsBrowserDistribution")
+    from(distributionTask)
+
+    // 2. Define the destination: 'docs' folder at the project root
+    // rootProject.projectDir refers to the very top level of your KMP project
+    into(rootProject.projectDir.resolve("docs"))
+
+    // 3. Optional: Clean the docs folder before copying to avoid stale files
+    doFirst {
+        delete(rootProject.projectDir.resolve("docs"))
+    }
+}
