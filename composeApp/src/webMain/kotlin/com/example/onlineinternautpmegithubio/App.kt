@@ -16,6 +16,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.example.onlineinternautpmegithubio.ui.AnimationExample
+import com.example.onlineinternautpmegithubio.ui.ThreeJsAnimation
 import org.jetbrains.compose.resources.painterResource
 
 import onlineinternautpmegithubio.composeapp.generated.resources.Res
@@ -34,11 +35,15 @@ fun App() {
         ) {
             AnimationExample(
                 modifier = Modifier
-                    .weight(0.5f)
+                    .weight(0.333f)
+            )
+            ThreeJsAnimation(
+                modifier = Modifier
+                    .weight(0.333f)
             )
             Column(
                 modifier = Modifier
-                    .weight(0.5f)
+                    .weight(0.333f)
                     .background(MaterialTheme.colorScheme.primaryContainer)
                     .safeContentPadding()
                     .fillMaxSize(),

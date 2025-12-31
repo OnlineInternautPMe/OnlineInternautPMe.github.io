@@ -6,10 +6,12 @@ Just an static web about me (made with Kotlin Multiplatform Web)
 
 - Run (on macOS/Linux)
   ```shell
+  # ./gradlew kotlinWasmUpgradeYarnLock
   ./gradlew :composeApp:wasmJsBrowserDevelopmentRun
   ```
 - Build deploy (on macOS/Linux)
   ```shell
+  # ./gradlew kotlinWasmUpgradeYarnLock
   ./gradlew buildDeploymentAndMoveToDocs --no-configuration-cache
   ```
 

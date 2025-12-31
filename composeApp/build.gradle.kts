@@ -33,6 +33,9 @@ kotlin {
         commonTest.dependencies {
             implementation(libs.kotlin.test)
         }
+        wasmJsMain.dependencies {
+            implementation(npm("three", "0.171.0"))
+        }
     }
 }
 
