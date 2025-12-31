@@ -16,7 +16,9 @@ import androidx.compose.ui.Modifier
 import org.jetbrains.compose.resources.painterResource
 
 import onlineinternautpmegithubio.composeapp.generated.resources.Res
+import onlineinternautpmegithubio.composeapp.generated.resources.app_name
 import onlineinternautpmegithubio.composeapp.generated.resources.compose_multiplatform
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun App() {
@@ -30,7 +32,7 @@ fun App() {
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Button(onClick = { showContent = !showContent }) {
-                Text("Click me!")
+                Text(stringResource(Res.string.app_name))
             }
             AnimatedVisibility(showContent) {
                 val greeting = remember { Greeting().greet() }
