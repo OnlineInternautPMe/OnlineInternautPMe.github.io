@@ -36,7 +36,7 @@ kotlin {
     }
 }
 
-tasks.register<Copy>("deployToDocs") {
+tasks.register<Copy>("buildDeploymentAndMoveToDocs") {
     group = "distribution"
     description = "Copies the web distribution to the root docs folder"
 
