@@ -1,6 +1,6 @@
-package com.example.onlineinternautpmegithubio
+package org.onlineinternautpme.mywebpage
 
-import androidx.compose.ui.ExperimentalComposeUiApi
+/*import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.window.ComposeViewport
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -8,4 +8,4 @@ fun main() {
     ComposeViewport {
         App()
     }
-}
+}*/

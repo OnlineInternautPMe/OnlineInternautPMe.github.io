@@ -1,4 +1,4 @@
-package com.example.onlineinternautpmegithubio
+package org.onlineinternautpme.mywebpage
 
 interface Platform {
     val name: String

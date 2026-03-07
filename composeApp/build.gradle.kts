@@ -1,4 +1,3 @@
-import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 
 plugins {
@@ -20,7 +19,7 @@ kotlin {
     }
     
     sourceSets {
-        commonMain.dependencies {
+        wasmJsMain.dependencies {
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.material3)
@@ -29,11 +28,7 @@ kotlin {
             implementation(compose.components.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
-        }
-        commonTest.dependencies {
-            implementation(libs.kotlin.test)
-        }
-        wasmJsMain.dependencies {
+            implementation("org.jetbrains.compose.material:material-icons-extended:1.7.3")
             implementation(npm("three", "0.171.0"))
         }
     }

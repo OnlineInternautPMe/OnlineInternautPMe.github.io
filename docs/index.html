@@ -2,19 +2,41 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OnlineInternautPMeGithubIo</title>
-    <link type="text/css" rel="stylesheet" href="styles.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Pixel 6 Pro 3D - Live Compose UI</title>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/renderers/CSS3DRenderer.js"></script>
+
+    <script src="scene.js"></script>
+    <script type="application/javascript" src="composeApp.js"></script>
+
+    <style>
+        body { margin: 0; overflow: hidden; background-color: #1a1a1a; font-family: sans-serif; touch-action: none; overscroll-behavior: none; }
+
+        #css-container { position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 1; display: none; }
+        #webgl-container { position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 2; pointer-events: none; display: none; background: transparent; }
+
+        #ComposeTarget {
+            width: 400px;
+            height: 885px;
+            background-color: transparent;
+        }
+
+        /* THE ULTIMATE CHROMIUM FIX */
+        /* We target the actual canvas element that Compose Wasm injects */
+        #ComposeTarget canvas {
+            /* These properties force Chromium to composite the WebGL buffer properly */
+            opacity: 0.999 !important;
+            filter: blur(0px) !important;
+            will-change: transform, opacity !important;
+            transform-style: preserve-3d !important;
+        }
+    </style>
 </head>
-<body style="text-align: center; align-content: center">
-<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 50 50" role="presentation">
-    <circle cx="25" cy="25" r="20" stroke="#ccc" stroke-width="4" fill="none"/>
-    <circle cx="25" cy="25" r="20" stroke="#333" stroke-width="4" fill="none" stroke-linecap="round"
-            stroke-dasharray="90 125">
-        <animateTransform attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="1s"
-                          repeatCount="indefinite"/>
-    </circle>
-</svg>
-<script type="application/javascript" src="composeApp.js"></script>
+<body>
+<div id="css-container"></div>
+<div id="webgl-container"></div>
+<div id="ComposeTarget"></div>
 </body>
 </html>

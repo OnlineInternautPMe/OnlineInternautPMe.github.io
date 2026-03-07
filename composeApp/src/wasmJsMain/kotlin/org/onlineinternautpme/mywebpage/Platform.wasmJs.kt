@@ -1,4 +1,4 @@
-package com.example.onlineinternautpmegithubio
+package org.onlineinternautpme.mywebpage
 
 class WasmPlatform: Platform {
     override val name: String = "Web with Kotlin/Wasm"
