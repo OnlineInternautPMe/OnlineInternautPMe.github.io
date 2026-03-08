@@ -2,12 +2,10 @@ package org.onlineinternautpme.mywebpage
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
@@ -25,6 +23,8 @@ import androidx.compose.ui.unit.sp
 import onlineinternautpmegithubio.composeapp.generated.resources.Res
 import onlineinternautpmegithubio.composeapp.generated.resources.favicon
 import org.jetbrains.compose.resources.painterResource
+import kotlin.math.ceil
+import kotlin.math.sqrt
 
 // --- Models ---
 // Note: We removed the 'route' string since we no longer need it for a NavHost
@@ -198,29 +198,52 @@ fun PortfolioApp() {
     }
 }
 
-// --- Reusable 4x2 Table Component ---
 @Composable
-fun FourByTwoTable(items: List<String>) {
+fun DynamicGridTable(items: List<String>) {
+    if (items.isEmpty()) return
+
+    // Sort elements by length so the longest items fall to the bottom rows
+    val sortedItems = items.sortedBy { it.length }
+
+    val columns = ceil(sqrt(sortedItems.size.toDouble())).toInt()
+    val rows = ceil(sortedItems.size.toDouble() / columns).toInt()
+
     Column(modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)) {
-        for (row in 0 until 2) {
-            Row(modifier = Modifier.fillMaxWidth()) {
-                for (col in 0 until 4) {
-                    val index = row * 4 + col
-                    val text = items.getOrElse(index) { "" }
+        for (row in 0 until rows) {
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(IntrinsicSize.Max)
+            ) {
+                val startIndex = row * columns
+                val endIndex = minOf(startIndex + columns, sortedItems.size)
+                val rowItems = sortedItems.subList(startIndex, endIndex)
+
+                for (text in rowItems) {
                     Surface(
                         modifier = Modifier
+                            // 1. Every item gets equal weight. If the last row has fewer items,
+                            // they naturally stretch to share the full width.
                             .weight(1f)
+                            .fillMaxHeight()
                             .padding(2.dp),
                         color = MaterialTheme.colorScheme.surfaceVariant,
                         shape = MaterialTheme.shapes.small
                     ) {
-                        Text(
-                            text = text,
-                            modifier = Modifier.padding(8.dp),
-                            textAlign = TextAlign.Center,
-                            style = MaterialTheme.typography.bodyMedium,
-                            maxLines = 1
-                        )
+                        // 2. Wrap the Text in a Box to easily center it vertically and horizontally
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(8.dp),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(
+                                text = text,
+                                textAlign = TextAlign.Center,
+                                style = MaterialTheme.typography.bodyMedium
+                            )
+                        }
                     }
                 }
             }
@@ -310,7 +333,7 @@ fun ExperienceScreen() {
                     Text(text = "${exp.company} | ${exp.dates}")
                     Spacer(modifier = Modifier.height(8.dp))
                     // Text(text = "Skills Used:")
-                    FourByTwoTable(exp.skills)
+                    DynamicGridTable(exp.skills)
                 }
             }
         }
@@ -321,16 +344,16 @@ fun ExperienceScreen() {
 @Composable
 fun EducationScreen() {
     val educations = listOf(
-        ExperienceItem("MSc Computer Science", "State University", "09/2016 - 05/2018",
-            listOf("Algorithms", "AI", "Databases", "Networks", "Math", "Logic", "Research", "Thesis")),
-        ExperienceItem("BSc Software Engineering", "Tech Institute", "09/2012 - 05/2016",
-            listOf("Java", "C++", "OS", "Data Structs", "Web Dev", "Testing", "UML", "Agile"))
+        ExperienceItem("Máster en Ciberseguridad", "Universidad de Alcalá de Henares", "2024 - Actualidad",
+            listOf("GNU/Linux", "Burp Suite", "Splunk", "HackTheBox", "PortSwigger", "FLARE-VM", "CryptoHack", "JCrypTool")),
+        ExperienceItem("Grado en Ingeniería Informática", "Universidad de Alcalá de Henares", "2020 - 2024",
+            listOf("Azure", "Docker", "Git", "Hugging Face", "Angular", "Java", "C", "Python", "SQL", "Javascript"))
     )
 
     LazyColumn(modifier = Modifier.fillMaxSize().padding(16.dp)) {
         item {
-            Text("Education", fontSize = 24.sp, fontWeight = FontWeight.Bold)
-            Text("My academic background and qualifications.", modifier = Modifier.padding(bottom = 16.dp))
+            Text("Educación Formativa", fontSize = 24.sp, fontWeight = FontWeight.Bold)
+            Text("Mi educación formativa", modifier = Modifier.padding(bottom = 16.dp))
         }
         items(educations) { edu ->
             Card(modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp)) {
@@ -338,8 +361,8 @@ fun EducationScreen() {
                     Text(text = edu.title, fontWeight = FontWeight.Bold, fontSize = 18.sp)
                     Text(text = "${edu.company} | ${edu.dates}")
                     Spacer(modifier = Modifier.height(8.dp))
-                    Text(text = "Key Subjects:")
-                    FourByTwoTable(edu.skills)
+                    // Text(text = "Key Subjects:")
+                    DynamicGridTable(edu.skills)
                 }
             }
         }
@@ -357,7 +380,7 @@ fun SoftSkillsScreen() {
     Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
         Text("Soft Skills", fontSize = 24.sp, fontWeight = FontWeight.Bold)
         Text("Personal attributes that enable me to interact effectively and harmoniously with other people.", modifier = Modifier.padding(vertical = 16.dp))
-        FourByTwoTable(softSkills)
+        DynamicGridTable(softSkills)
     }
 }
 
@@ -372,7 +395,7 @@ fun InterestsScreen() {
     Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
         Text("Interests", fontSize = 24.sp, fontWeight = FontWeight.Bold)
         Text("What I enjoy doing in my free time to stay creative and energized.", modifier = Modifier.padding(vertical = 16.dp))
-        FourByTwoTable(interests)
+        DynamicGridTable(interests)
     }
 }
 
