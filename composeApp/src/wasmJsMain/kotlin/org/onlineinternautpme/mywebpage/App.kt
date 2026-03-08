@@ -16,8 +16,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.LinkAnnotation
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextLinkStyles
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.withLink
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import onlineinternautpmegithubio.composeapp.generated.resources.Res
@@ -260,6 +266,8 @@ fun AboutMeScreen() {
             .padding(10.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        Spacer(modifier = Modifier.padding(vertical = 16.dp))
+
         Box(
             modifier = Modifier
                 .size(120.dp)
@@ -281,28 +289,21 @@ fun AboutMeScreen() {
         ) {
             Icon(Icons.Default.Link, contentDescription = "LinkedIn", tint = Color.Gray, modifier = Modifier.size(16.dp))
             Spacer(modifier = Modifier.padding(horizontal = 2.dp))
-            Text(text = "linkedin.com/in/alvaro-radajczyk")
-        }
-        Row(
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Icon(Icons.Default.Web, contentDescription = "My Webpage", tint = Color.Gray, modifier = Modifier.size(16.dp))
-            Spacer(modifier = Modifier.padding(horizontal = 2.dp))
-            Text(text = "onlineinternautpme.github.io")
+            ModernClickableLink(text = "linkedin.com/in/alvaro-radajczyk", url = "https://linkedin.com/in/alvaro-radajczyk")
         }
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(Icons.Default.Email, contentDescription = "Email", tint = Color.Gray, modifier = Modifier.size(16.dp))
             Spacer(modifier = Modifier.padding(horizontal = 2.dp))
-            Text(text = "alvaroradajczyk@protonmail.com")
+            ModernClickableLink(text = "alvaroradajczyk@protonmail.com", url = "mailto:alvaroradajczyk@protonmail.com")
         }
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(Icons.Default.Phone, contentDescription = "Phone Number", tint = Color.Gray, modifier = Modifier.size(16.dp))
             Spacer(modifier = Modifier.padding(horizontal = 2.dp))
-            Text(text = "+34 654 49 00 36")
+            ModernClickableLink(text = "+34 654 49 00 36", url = "tel:+34654490036")
         }
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -397,6 +398,33 @@ fun InterestsScreen() {
         Text("Mis intereses, aquello a lo que dedico tiempo libre a aprender porque considero importante desde el punto de vista técnico en Ciberseguridad", modifier = Modifier.padding(vertical = 16.dp))
         DynamicGridTable(interests)
     }
+}
+
+@Composable
+fun ModernClickableLink(text: String, url: String) {
+    val linkText = buildAnnotatedString {
+        withLink(
+            LinkAnnotation.Url(
+                url = url,
+                styles = TextLinkStyles(
+                    // Default state
+                    style = SpanStyle(
+                        color = Color.Blue,
+                        textDecoration = TextDecoration.None
+                    ),
+                    // State when the mouse is hovering over the text
+                    hoveredStyle = SpanStyle(
+                        color = Color.DarkGray,
+                        textDecoration = TextDecoration.Underline
+                    )
+                )
+            )
+        ) {
+            append(text)
+        }
+    }
+
+    Text(text = linkText)
 }
 
 @Composable
