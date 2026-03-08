@@ -388,13 +388,13 @@ fun SoftSkillsScreen() {
 @Composable
 fun InterestsScreen() {
     val interests = listOf(
-        "Photography", "Traveling", "Reading", "Cooking",
-        "Open Source", "Gaming", "Hiking", "Music"
+        "Proxmox", "SeL4", "RISC-V", "ÁNGELES-CNI",
+        "Rust", "QubesOS", "NixOS", "GenAI"
     )
 
     Column(modifier = Modifier.fillMaxSize().padding(10.dp)) {
-        Text("Interests", fontSize = 24.sp, fontWeight = FontWeight.Bold)
-        Text("What I enjoy doing in my free time to stay creative and energized.", modifier = Modifier.padding(vertical = 16.dp))
+        Text("Intereses", fontSize = 24.sp, fontWeight = FontWeight.Bold)
+        Text("Mis intereses, aquello a lo que dedico tiempo libre a aprender porque considero importante desde el punto de vista técnico en Ciberseguridad", modifier = Modifier.padding(vertical = 16.dp))
         DynamicGridTable(interests)
     }
 }
