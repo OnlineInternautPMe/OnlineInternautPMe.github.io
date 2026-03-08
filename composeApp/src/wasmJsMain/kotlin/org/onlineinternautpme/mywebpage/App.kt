@@ -1,12 +1,11 @@
 package org.onlineinternautpme.mywebpage
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
@@ -16,19 +15,31 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.LinkAnnotation
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextLinkStyles
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.withLink
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import onlineinternautpmegithubio.composeapp.generated.resources.Res
+import onlineinternautpmegithubio.composeapp.generated.resources.favicon
+import org.jetbrains.compose.resources.painterResource
+import kotlin.math.ceil
+import kotlin.math.sqrt
 
 // --- Models ---
 // Note: We removed the 'route' string since we no longer need it for a NavHost
 sealed class BottomNavItem(val title: String, val icon: ImageVector) {
-    object About : BottomNavItem("About Me", Icons.Default.Person)
-    object Experience : BottomNavItem("Experience", Icons.Default.Work)
-    object Education : BottomNavItem("Education", Icons.Default.School)
+    object About : BottomNavItem("Resumen", Icons.Default.Person)
+    object Experience : BottomNavItem("Experiencia", Icons.Default.Work)
+    object Education : BottomNavItem("Educación", Icons.Default.School)
     object SoftSkills : BottomNavItem("Soft Skills", Icons.Default.Star)
-    object Interests : BottomNavItem("Interests", Icons.Default.Favorite)
+    object Interests : BottomNavItem("Intereses", Icons.Default.Favorite)
 }
 
 data class ExperienceItem(
@@ -193,29 +204,52 @@ fun PortfolioApp() {
     }
 }
 
-// --- Reusable 4x2 Table Component ---
 @Composable
-fun FourByTwoTable(items: List<String>) {
+fun DynamicGridTable(items: List<String>) {
+    if (items.isEmpty()) return
+
+    // Sort elements by length so the longest items fall to the bottom rows
+    val sortedItems = items.sortedBy { it.length }
+
+    val columns = ceil(sqrt(sortedItems.size.toDouble())).toInt()
+    val rows = ceil(sortedItems.size.toDouble() / columns).toInt()
+
     Column(modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)) {
-        for (row in 0 until 2) {
-            Row(modifier = Modifier.fillMaxWidth()) {
-                for (col in 0 until 4) {
-                    val index = row * 4 + col
-                    val text = items.getOrElse(index) { "" }
+        for (row in 0 until rows) {
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(IntrinsicSize.Max)
+            ) {
+                val startIndex = row * columns
+                val endIndex = minOf(startIndex + columns, sortedItems.size)
+                val rowItems = sortedItems.subList(startIndex, endIndex)
+
+                for (text in rowItems) {
                     Surface(
                         modifier = Modifier
+                            // 1. Every item gets equal weight. If the last row has fewer items,
+                            // they naturally stretch to share the full width.
                             .weight(1f)
+                            .fillMaxHeight()
                             .padding(2.dp),
                         color = MaterialTheme.colorScheme.surfaceVariant,
                         shape = MaterialTheme.shapes.small
                     ) {
-                        Text(
-                            text = text,
-                            modifier = Modifier.padding(8.dp),
-                            textAlign = TextAlign.Center,
-                            style = MaterialTheme.typography.bodySmall,
-                            maxLines = 1
-                        )
+                        // 2. Wrap the Text in a Box to easily center it vertically and horizontally
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(6.dp),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(
+                                text = text,
+                                textAlign = TextAlign.Center,
+                                style = MaterialTheme.typography.bodyMedium
+                            )
+                        }
                     }
                 }
             }
@@ -229,33 +263,53 @@ fun AboutMeScreen() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp),
+            .padding(10.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        Spacer(modifier = Modifier.padding(vertical = 16.dp))
+
         Box(
             modifier = Modifier
                 .size(120.dp)
                 .clip(CircleShape)
-                .background(Color.Gray),
+                .background(Color.White),
             contentAlignment = Alignment.Center
         ) {
-            Icon(Icons.Default.Person, contentDescription = "Photo", tint = Color.White, modifier = Modifier.size(60.dp))
+            Image(painterResource(Res.drawable.favicon), contentDescription = "Photo", modifier = Modifier.size(120.dp), contentScale = ContentScale.Fit)
         }
 
         Spacer(modifier = Modifier.height(16.dp))
-        Text(text = "En", fontSize = 24.sp, fontWeight = FontWeight.Bold)
-        Text(text = "desarrollo", fontSize = 24.sp, fontWeight = FontWeight.Bold)
+        Text(text = "Álvaro", fontSize = 24.sp, fontWeight = FontWeight.Bold)
+        Text(text = "Radajczyk", fontSize = 24.sp, fontWeight = FontWeight.Bold)
+        Text(text = "Sánchez", fontSize = 24.sp, fontWeight = FontWeight.Bold)
 
         Spacer(modifier = Modifier.height(16.dp))
-        Text(text = "Email: jane.doe@example.com")
-        Text(text = "Phone: +1 234 567 8900")
-        Text(text = "LinkedIn: linkedin.com/in/janedoe")
-        Text(text = "GitHub: github.com/janedoe")
+        Row(
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(Icons.Default.Link, contentDescription = "LinkedIn", tint = Color.Gray, modifier = Modifier.size(16.dp))
+            Spacer(modifier = Modifier.padding(horizontal = 2.dp))
+            ModernClickableLink(text = "linkedin.com/in/alvaro-radajczyk", url = "https://linkedin.com/in/alvaro-radajczyk")
+        }
+        Row(
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(Icons.Default.Email, contentDescription = "Email", tint = Color.Gray, modifier = Modifier.size(16.dp))
+            Spacer(modifier = Modifier.padding(horizontal = 2.dp))
+            ModernClickableLink(text = "alvaroradajczyk@protonmail.com", url = "mailto:alvaroradajczyk@protonmail.com")
+        }
+        Row(
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(Icons.Default.Phone, contentDescription = "Phone Number", tint = Color.Gray, modifier = Modifier.size(16.dp))
+            Spacer(modifier = Modifier.padding(horizontal = 2.dp))
+            ModernClickableLink(text = "+34 654 49 00 36", url = "tel:+34654490036")
+        }
 
         Spacer(modifier = Modifier.height(16.dp))
         Text(
-            text = "Summary: An enthusiastic software engineer with a passion for building scalable Android applications using modern tools like Kotlin and Jetpack Compose.",
-            textAlign = TextAlign.Center
+            text = "Actualmente resido en Alcalá de Henares. Tengo 2 años de experiencia trabajando en equipo como desarrollador de Android, tanto en el frontend como en el backend. Además, recibo formación relacionada con la ciberseguridad, con la cual que he aprendido la importancia de la seguridad en los sistemas de información, tanto desde la parte técnica como en la de gobernanza y de concienciación",
+            textAlign = TextAlign.Justify
         )
     }
 }
@@ -264,16 +318,14 @@ fun AboutMeScreen() {
 @Composable
 fun ExperienceScreen() {
     val experiences = listOf(
-        ExperienceItem("Senior Android Engineer", "Tech Corp", "01/2021 - Present",
-            listOf("Kotlin", "Compose", "Coroutines", "Dagger", "Retrofit", "Room", "Git", "Jira")),
-        ExperienceItem("Android Developer", "App Studio", "06/2018 - 12/2020",
-            listOf("Java", "XML", "MVVM", "RxJava", "SQLite", "Firebase", "Scrum", "CI/CD"))
+        ExperienceItem("Desarrollador de Android", "Custos Mobile SL", "03/2024 - Actualidad",
+            listOf("Android SDK", "Kotlin", "Jetpack Compose", "JUnit", "MVVM", "GitLab", "K8s", "WebRTC"))
     )
 
-    LazyColumn(modifier = Modifier.fillMaxSize().padding(16.dp)) {
+    LazyColumn(modifier = Modifier.fillMaxSize().padding(10.dp)) {
         item {
-            Text("Experience", fontSize = 24.sp, fontWeight = FontWeight.Bold)
-            Text("A detailed look at my professional journey.", modifier = Modifier.padding(bottom = 16.dp))
+            Text("Experiencia Laboral/Profesional", fontSize = 24.sp, fontWeight = FontWeight.Bold)
+            Text("Mi experiencia laboral", modifier = Modifier.padding(bottom = 16.dp))
         }
         items(experiences) { exp ->
             Card(modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp)) {
@@ -281,8 +333,8 @@ fun ExperienceScreen() {
                     Text(text = exp.title, fontWeight = FontWeight.Bold, fontSize = 18.sp)
                     Text(text = "${exp.company} | ${exp.dates}")
                     Spacer(modifier = Modifier.height(8.dp))
-                    Text(text = "Skills Used:")
-                    FourByTwoTable(exp.skills)
+                    // Text(text = "Skills Used:")
+                    DynamicGridTable(exp.skills)
                 }
             }
         }
@@ -293,16 +345,16 @@ fun ExperienceScreen() {
 @Composable
 fun EducationScreen() {
     val educations = listOf(
-        ExperienceItem("MSc Computer Science", "State University", "09/2016 - 05/2018",
-            listOf("Algorithms", "AI", "Databases", "Networks", "Math", "Logic", "Research", "Thesis")),
-        ExperienceItem("BSc Software Engineering", "Tech Institute", "09/2012 - 05/2016",
-            listOf("Java", "C++", "OS", "Data Structs", "Web Dev", "Testing", "UML", "Agile"))
+        ExperienceItem("Máster en Ciberseguridad", "Universidad de Alcalá de Henares", "2024 - Actualidad",
+            listOf("GNU/Linux", "Burp Suite", "Splunk", "HackTheBox", "PortSwigger", "FLARE-VM", "CryptoHack", "JCrypTool")),
+        ExperienceItem("Grado en Ingeniería Informática", "Universidad de Alcalá de Henares", "2020 - 2024",
+            listOf("Azure", "Docker", "Git", "Hugging Face", "Angular", "Java", "C", "Python", "SQL", "Javascript"))
     )
 
-    LazyColumn(modifier = Modifier.fillMaxSize().padding(16.dp)) {
+    LazyColumn(modifier = Modifier.fillMaxSize().padding(10.dp)) {
         item {
-            Text("Education", fontSize = 24.sp, fontWeight = FontWeight.Bold)
-            Text("My academic background and qualifications.", modifier = Modifier.padding(bottom = 16.dp))
+            Text("Educación Formativa", fontSize = 24.sp, fontWeight = FontWeight.Bold)
+            Text("Mi educación formativa", modifier = Modifier.padding(bottom = 16.dp))
         }
         items(educations) { edu ->
             Card(modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp)) {
@@ -310,8 +362,8 @@ fun EducationScreen() {
                     Text(text = edu.title, fontWeight = FontWeight.Bold, fontSize = 18.sp)
                     Text(text = "${edu.company} | ${edu.dates}")
                     Spacer(modifier = Modifier.height(8.dp))
-                    Text(text = "Key Subjects:")
-                    FourByTwoTable(edu.skills)
+                    // Text(text = "Key Subjects:")
+                    DynamicGridTable(edu.skills)
                 }
             }
         }
@@ -322,14 +374,14 @@ fun EducationScreen() {
 @Composable
 fun SoftSkillsScreen() {
     val softSkills = listOf(
-        "Leadership", "Communication", "Teamwork", "Problem Solving",
-        "Adaptability", "Time Management", "Creativity", "Work Ethic"
+        "Proactividad", "Flexibilidad", "Responsabilidad",
+        "Trabajo en equipo", "Actitud hacia el trabajo", "Inglés Básico"
     )
 
-    Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
-        Text("Soft Skills", fontSize = 24.sp, fontWeight = FontWeight.Bold)
-        Text("Personal attributes that enable me to interact effectively and harmoniously with other people.", modifier = Modifier.padding(vertical = 16.dp))
-        FourByTwoTable(softSkills)
+    Column(modifier = Modifier.fillMaxSize().padding(10.dp)) {
+        Text("Habilidades Interpersonales y otros", fontSize = 24.sp, fontWeight = FontWeight.Bold)
+        Text("Mis habilidades interpersonales y otras habilidades", modifier = Modifier.padding(vertical = 16.dp))
+        DynamicGridTable(softSkills)
     }
 }
 
@@ -337,15 +389,42 @@ fun SoftSkillsScreen() {
 @Composable
 fun InterestsScreen() {
     val interests = listOf(
-        "Photography", "Traveling", "Reading", "Cooking",
-        "Open Source", "Gaming", "Hiking", "Music"
+        "Proxmox", "SeL4", "RISC-V", "ÁNGELES-CNI",
+        "Rust", "QubesOS", "NixOS", "GenAI"
     )
 
-    Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
-        Text("Interests", fontSize = 24.sp, fontWeight = FontWeight.Bold)
-        Text("What I enjoy doing in my free time to stay creative and energized.", modifier = Modifier.padding(vertical = 16.dp))
-        FourByTwoTable(interests)
+    Column(modifier = Modifier.fillMaxSize().padding(10.dp)) {
+        Text("Intereses", fontSize = 24.sp, fontWeight = FontWeight.Bold)
+        Text("Mis intereses, aquello a lo que dedico tiempo libre a aprender porque considero importante desde el punto de vista técnico en Ciberseguridad", modifier = Modifier.padding(vertical = 16.dp))
+        DynamicGridTable(interests)
     }
+}
+
+@Composable
+fun ModernClickableLink(text: String, url: String) {
+    val linkText = buildAnnotatedString {
+        withLink(
+            LinkAnnotation.Url(
+                url = url,
+                styles = TextLinkStyles(
+                    // Default state
+                    style = SpanStyle(
+                        color = Color.Blue,
+                        textDecoration = TextDecoration.None
+                    ),
+                    // State when the mouse is hovering over the text
+                    hoveredStyle = SpanStyle(
+                        color = Color.DarkGray,
+                        textDecoration = TextDecoration.Underline
+                    )
+                )
+            )
+        ) {
+            append(text)
+        }
+    }
+
+    Text(text = linkText)
 }
 
 @Composable

@@ -17,9 +17,9 @@ kotlin {
         browser()
         binaries.executable()
     }
-    
+
     sourceSets {
-        wasmJsMain.dependencies {
+        commonMain.dependencies {
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.material3)
@@ -30,6 +30,9 @@ kotlin {
             implementation(libs.androidx.lifecycle.runtimeCompose)
             implementation("org.jetbrains.compose.material:material-icons-extended:1.7.3")
             implementation(npm("three", "0.171.0"))
+        }
+        wasmJsMain.dependencies {
+
         }
     }
 }
