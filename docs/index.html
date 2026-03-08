@@ -17,6 +17,22 @@
         #css-container { position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 1; display: none; }
         #webgl-container { position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 2; pointer-events: none; display: none; background: transparent; }
 
+        #info {
+	position: absolute;
+	top: 0px;
+	width: 100%;
+	padding: 10px;
+	z-index: 100;
+	color: white;
+	box-sizing: border-box;
+	text-align: center;
+	-moz-user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	pointer-events: none;
+}
+
         #ComposeTarget {
             width: 400px;
             height: 885px;
@@ -35,6 +51,7 @@
     </style>
 </head>
 <body>
+<div id="info">Equirectangular Map by J&oacute;n Ragnarsson.</div>
 <div id="css-container"></div>
 <div id="webgl-container"></div>
 <div id="ComposeTarget"></div>
