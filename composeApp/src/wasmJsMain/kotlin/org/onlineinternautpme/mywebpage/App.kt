@@ -235,7 +235,7 @@ fun DynamicGridTable(items: List<String>) {
                         Box(
                             modifier = Modifier
                                 .fillMaxSize()
-                                .padding(8.dp),
+                                .padding(6.dp),
                             contentAlignment = Alignment.Center
                         ) {
                             Text(
@@ -257,7 +257,7 @@ fun AboutMeScreen() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp),
+            .padding(10.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Box(
@@ -321,7 +321,7 @@ fun ExperienceScreen() {
             listOf("Android SDK", "Kotlin", "Jetpack Compose", "JUnit", "MVVM", "GitLab", "K8s", "WebRTC"))
     )
 
-    LazyColumn(modifier = Modifier.fillMaxSize().padding(16.dp)) {
+    LazyColumn(modifier = Modifier.fillMaxSize().padding(10.dp)) {
         item {
             Text("Experiencia Laboral/Profesional", fontSize = 24.sp, fontWeight = FontWeight.Bold)
             Text("Mi experiencia laboral", modifier = Modifier.padding(bottom = 16.dp))
@@ -350,7 +350,7 @@ fun EducationScreen() {
             listOf("Azure", "Docker", "Git", "Hugging Face", "Angular", "Java", "C", "Python", "SQL", "Javascript"))
     )
 
-    LazyColumn(modifier = Modifier.fillMaxSize().padding(16.dp)) {
+    LazyColumn(modifier = Modifier.fillMaxSize().padding(10.dp)) {
         item {
             Text("Educación Formativa", fontSize = 24.sp, fontWeight = FontWeight.Bold)
             Text("Mi educación formativa", modifier = Modifier.padding(bottom = 16.dp))
@@ -373,13 +373,13 @@ fun EducationScreen() {
 @Composable
 fun SoftSkillsScreen() {
     val softSkills = listOf(
-        "Leadership", "Communication", "Teamwork", "Problem Solving",
-        "Adaptability", "Time Management", "Creativity", "Work Ethic"
+        "Proactividad", "Flexibilidad", "Responsabilidad",
+        "Trabajo en equipo", "Actitud hacia el trabajo", "Inglés Básico"
     )
 
-    Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
-        Text("Soft Skills", fontSize = 24.sp, fontWeight = FontWeight.Bold)
-        Text("Personal attributes that enable me to interact effectively and harmoniously with other people.", modifier = Modifier.padding(vertical = 16.dp))
+    Column(modifier = Modifier.fillMaxSize().padding(10.dp)) {
+        Text("Habilidades Interpersonales y otros", fontSize = 24.sp, fontWeight = FontWeight.Bold)
+        Text("Mis habilidades interpersonales y otras habilidades", modifier = Modifier.padding(vertical = 16.dp))
         DynamicGridTable(softSkills)
     }
 }
@@ -392,7 +392,7 @@ fun InterestsScreen() {
         "Open Source", "Gaming", "Hiking", "Music"
     )
 
-    Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
+    Column(modifier = Modifier.fillMaxSize().padding(10.dp)) {
         Text("Interests", fontSize = 24.sp, fontWeight = FontWeight.Bold)
         Text("What I enjoy doing in my free time to stay creative and energized.", modifier = Modifier.padding(vertical = 16.dp))
         DynamicGridTable(interests)
