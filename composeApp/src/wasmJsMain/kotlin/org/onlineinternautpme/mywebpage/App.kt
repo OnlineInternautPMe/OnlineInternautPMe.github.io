@@ -218,7 +218,7 @@ fun FourByTwoTable(items: List<String>) {
                             text = text,
                             modifier = Modifier.padding(8.dp),
                             textAlign = TextAlign.Center,
-                            style = MaterialTheme.typography.bodySmall,
+                            style = MaterialTheme.typography.bodyMedium,
                             maxLines = 1
                         )
                     }
@@ -294,16 +294,14 @@ fun AboutMeScreen() {
 @Composable
 fun ExperienceScreen() {
     val experiences = listOf(
-        ExperienceItem("Senior Android Engineer", "Tech Corp", "01/2021 - Present",
-            listOf("Kotlin", "Compose", "Coroutines", "Dagger", "Retrofit", "Room", "Git", "Jira")),
-        ExperienceItem("Android Developer", "App Studio", "06/2018 - 12/2020",
-            listOf("Java", "XML", "MVVM", "RxJava", "SQLite", "Firebase", "Scrum", "CI/CD"))
+        ExperienceItem("Desarrollador de Android", "Custos Mobile SL", "03/2024 - Actualidad",
+            listOf("Android SDK", "Kotlin", "Jetpack Compose", "JUnit", "MVVM", "GitLab", "K8s", "WebRTC"))
     )
 
     LazyColumn(modifier = Modifier.fillMaxSize().padding(16.dp)) {
         item {
-            Text("Experience", fontSize = 24.sp, fontWeight = FontWeight.Bold)
-            Text("A detailed look at my professional journey.", modifier = Modifier.padding(bottom = 16.dp))
+            Text("Experiencia Laboral/Profesional", fontSize = 24.sp, fontWeight = FontWeight.Bold)
+            Text("Mi experiencia laboral", modifier = Modifier.padding(bottom = 16.dp))
         }
         items(experiences) { exp ->
             Card(modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp)) {
@@ -311,7 +309,7 @@ fun ExperienceScreen() {
                     Text(text = exp.title, fontWeight = FontWeight.Bold, fontSize = 18.sp)
                     Text(text = "${exp.company} | ${exp.dates}")
                     Spacer(modifier = Modifier.height(8.dp))
-                    Text(text = "Skills Used:")
+                    // Text(text = "Skills Used:")
                     FourByTwoTable(exp.skills)
                 }
             }
