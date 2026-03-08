@@ -1,5 +1,6 @@
 package org.onlineinternautpme.mywebpage
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -16,19 +17,23 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import onlineinternautpmegithubio.composeapp.generated.resources.Res
+import onlineinternautpmegithubio.composeapp.generated.resources.favicon
+import org.jetbrains.compose.resources.painterResource
 
 // --- Models ---
 // Note: We removed the 'route' string since we no longer need it for a NavHost
 sealed class BottomNavItem(val title: String, val icon: ImageVector) {
-    object About : BottomNavItem("About Me", Icons.Default.Person)
-    object Experience : BottomNavItem("Experience", Icons.Default.Work)
-    object Education : BottomNavItem("Education", Icons.Default.School)
+    object About : BottomNavItem("Resumen", Icons.Default.Person)
+    object Experience : BottomNavItem("Experiencia", Icons.Default.Work)
+    object Education : BottomNavItem("Educación", Icons.Default.School)
     object SoftSkills : BottomNavItem("Soft Skills", Icons.Default.Star)
-    object Interests : BottomNavItem("Interests", Icons.Default.Favorite)
+    object Interests : BottomNavItem("Intereses", Icons.Default.Favorite)
 }
 
 data class ExperienceItem(
@@ -236,26 +241,51 @@ fun AboutMeScreen() {
             modifier = Modifier
                 .size(120.dp)
                 .clip(CircleShape)
-                .background(Color.Gray),
+                .background(Color.White),
             contentAlignment = Alignment.Center
         ) {
-            Icon(Icons.Default.Person, contentDescription = "Photo", tint = Color.White, modifier = Modifier.size(60.dp))
+            Image(painterResource(Res.drawable.favicon), contentDescription = "Photo", modifier = Modifier.size(120.dp), contentScale = ContentScale.Fit)
         }
 
         Spacer(modifier = Modifier.height(16.dp))
-        Text(text = "En", fontSize = 24.sp, fontWeight = FontWeight.Bold)
-        Text(text = "desarrollo", fontSize = 24.sp, fontWeight = FontWeight.Bold)
+        Text(text = "Álvaro", fontSize = 24.sp, fontWeight = FontWeight.Bold)
+        Text(text = "Radajczyk", fontSize = 24.sp, fontWeight = FontWeight.Bold)
+        Text(text = "Sánchez", fontSize = 24.sp, fontWeight = FontWeight.Bold)
 
         Spacer(modifier = Modifier.height(16.dp))
-        Text(text = "Email: jane.doe@example.com")
-        Text(text = "Phone: +1 234 567 8900")
-        Text(text = "LinkedIn: linkedin.com/in/janedoe")
-        Text(text = "GitHub: github.com/janedoe")
+        Row(
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(Icons.Default.Link, contentDescription = "LinkedIn", tint = Color.Gray, modifier = Modifier.size(16.dp))
+            Spacer(modifier = Modifier.padding(horizontal = 2.dp))
+            Text(text = "linkedin.com/in/alvaro-radajczyk")
+        }
+        Row(
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(Icons.Default.Web, contentDescription = "My Webpage", tint = Color.Gray, modifier = Modifier.size(16.dp))
+            Spacer(modifier = Modifier.padding(horizontal = 2.dp))
+            Text(text = "onlineinternautpme.github.io")
+        }
+        Row(
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(Icons.Default.Email, contentDescription = "Email", tint = Color.Gray, modifier = Modifier.size(16.dp))
+            Spacer(modifier = Modifier.padding(horizontal = 2.dp))
+            Text(text = "alvaroradajczyk@protonmail.com")
+        }
+        Row(
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(Icons.Default.Phone, contentDescription = "Phone Number", tint = Color.Gray, modifier = Modifier.size(16.dp))
+            Spacer(modifier = Modifier.padding(horizontal = 2.dp))
+            Text(text = "+34 654 49 00 36")
+        }
 
         Spacer(modifier = Modifier.height(16.dp))
         Text(
-            text = "Summary: An enthusiastic software engineer with a passion for building scalable Android applications using modern tools like Kotlin and Jetpack Compose.",
-            textAlign = TextAlign.Center
+            text = "Actualmente resido en Alcalá de Henares. Tengo 2 años de experiencia trabajando en equipo como desarrollador de Android, tanto en el frontend como en el backend. Además, recibo formación relacionada con la ciberseguridad, con la cual que he aprendido la importancia de la seguridad en los sistemas de información, tanto desde la parte técnica como en la de gobernanza y de concienciación",
+            textAlign = TextAlign.Justify
         )
     }
 }
