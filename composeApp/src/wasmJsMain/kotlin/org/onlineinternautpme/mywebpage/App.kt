@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import onlineinternautpmegithubio.composeapp.generated.resources.Res
 import onlineinternautpmegithubio.composeapp.generated.resources.favicon
+import onlineinternautpmegithubio.composeapp.generated.resources.fotocv3
 import org.jetbrains.compose.resources.painterResource
 import kotlin.math.ceil
 import kotlin.math.sqrt
@@ -270,12 +271,16 @@ fun AboutMeScreen() {
 
         Box(
             modifier = Modifier
-                .size(120.dp)
+                .size(180.dp)
                 .clip(CircleShape)
                 .background(Color.White),
             contentAlignment = Alignment.Center
         ) {
-            Image(painterResource(Res.drawable.favicon), contentDescription = "Photo", modifier = Modifier.size(120.dp), contentScale = ContentScale.Fit)
+            Image(
+                painter = painterResource(Res.drawable.fotocv3), contentDescription = "Photo",
+                modifier = Modifier.size(180.dp),
+                contentScale = ContentScale.Fit
+            )
         }
 
         Spacer(modifier = Modifier.height(16.dp))
