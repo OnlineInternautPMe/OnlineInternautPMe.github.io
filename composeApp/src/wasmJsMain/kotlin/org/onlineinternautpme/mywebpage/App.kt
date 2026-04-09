@@ -24,10 +24,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withLink
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import onlineinternautpmegithubio.composeapp.generated.resources.Res
-import onlineinternautpmegithubio.composeapp.generated.resources.favicon
 import onlineinternautpmegithubio.composeapp.generated.resources.fotocv3
 import org.jetbrains.compose.resources.painterResource
 import kotlin.math.ceil
@@ -36,11 +36,11 @@ import kotlin.math.sqrt
 // --- Models ---
 // Note: We removed the 'route' string since we no longer need it for a NavHost
 sealed class BottomNavItem(val title: String, val icon: ImageVector) {
-    object About : BottomNavItem("Resumen", Icons.Default.Person)
-    object Experience : BottomNavItem("Experiencia", Icons.Default.Work)
-    object Education : BottomNavItem("Educación", Icons.Default.School)
-    object SoftSkills : BottomNavItem("Soft Skills", Icons.Default.Star)
-    object Interests : BottomNavItem("Intereses", Icons.Default.Favorite)
+    object About : BottomNavItem("Resumen\n", Icons.Default.Person)
+    object Experience : BottomNavItem("Experiencia\n", Icons.Default.Work)
+    object Education : BottomNavItem("Educación\n", Icons.Default.School)
+    object SoftSkills : BottomNavItem("Idiomas &\nSoft Skills", Icons.Default.Language)
+    object Interests : BottomNavItem("Intereses\n", Icons.Default.Star)
 }
 
 data class ExperienceItem(
@@ -179,11 +179,13 @@ fun PortfolioApp() {
 
     Scaffold(
         bottomBar = {
-            NavigationBar {
+            NavigationBar(
+                windowInsets = WindowInsets(top=4.dp) //NavigationBarDefaults.windowInsets.
+            ) {
                 items.forEach { item ->
                     NavigationBarItem(
                         icon = { Icon(item.icon, contentDescription = item.title) },
-                        label = { Text(item.title, maxLines = 1) },
+                        label = { Text(item.title, maxLines = 2) },
                         selected = selectedItem == item,
                         onClick = { selectedItem = item } // Update state on click
                     )
@@ -198,7 +200,7 @@ fun PortfolioApp() {
                 BottomNavItem.About -> AboutMeScreen()
                 BottomNavItem.Experience -> ExperienceScreen()
                 BottomNavItem.Education -> EducationScreen()
-                BottomNavItem.SoftSkills -> SoftSkillsScreen()
+                BottomNavItem.SoftSkills -> LanguagesAndSoftSkillsScreen()
                 BottomNavItem.Interests -> InterestsScreen()
             }
         }
@@ -313,7 +315,26 @@ fun AboutMeScreen() {
 
         Spacer(modifier = Modifier.height(16.dp))
         Text(
-            text = "Actualmente resido en Alcalá de Henares. Tengo 2 años de experiencia trabajando en equipo como desarrollador de Android, tanto en el frontend como en el backend. Además, recibo formación relacionada con la ciberseguridad, con la cual que he aprendido la importancia de la seguridad en los sistemas de información, tanto desde la parte técnica como en la de gobernanza y de concienciación",
+            //text = "Actualmente resido en Alcalá de Henares. Tengo 2 años de experiencia trabajando en equipo como desarrollador de Android, tanto en el frontend como en el backend. Además, recibo formación relacionada con la ciberseguridad, con la cual estoy aprendiendo la importancia de la seguridad en los sistemas de información, tanto desde la parte técnica como en la de gobernanza y de concienciación",
+            text = buildAnnotatedString {
+                append("Actualmente resido en ")
+                withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) { append("Alcalá de Henares") }
+                append(". Tengo ")
+                withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) { append("2 años de experiencia") }
+                append(" trabajando en equipo como ")
+                withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) { append("Desarrollador de Android") }
+                append(", tanto en el frontend como en el backend. Además, recibo ")
+                withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) { append("formación") }
+                append(" relacionada con la ciberseguridad, con la cual ")
+                withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) { append("estoy aprendiendo") }
+                append(" la importancia de la seguridad en los sistemas de información, tanto desde la parte ")
+                withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) { append("técnica") }
+                append(" como en la de ")
+                withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) { append("gobernanza") }
+                append(" y ")
+                withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) { append("concienciación") }
+                append(".")
+            },
             textAlign = TextAlign.Justify
         )
     }
@@ -327,7 +348,7 @@ fun ExperienceScreen() {
             listOf("Android SDK", "Kotlin", "Jetpack Compose", "JUnit", "MVVM", "GitLab", "K8s", "WebRTC"))
     )
 
-    LazyColumn(modifier = Modifier.fillMaxSize().padding(10.dp)) {
+    LazyColumn(modifier = Modifier.fillMaxSize().padding(top=18.dp, bottom=10.dp, start = 10.dp, end = 10.dp)) {
         item {
             Text("Experiencia Laboral/Profesional", fontSize = 24.sp, fontWeight = FontWeight.Bold)
             Text("Mi experiencia laboral", modifier = Modifier.padding(bottom = 16.dp))
@@ -353,10 +374,10 @@ fun EducationScreen() {
         ExperienceItem("Máster en Ciberseguridad", "Universidad de Alcalá de Henares", "2024 - Actualidad",
             listOf("GNU/Linux", "Burp Suite", "Splunk", "HackTheBox", "PortSwigger", "FLARE-VM", "CryptoHack", "JCrypTool")),
         ExperienceItem("Grado en Ingeniería Informática", "Universidad de Alcalá de Henares", "2020 - 2024",
-            listOf("Azure", "Docker", "Git", "Hugging Face", "Angular", "Java", "C", "Python", "SQL", "Javascript"))
+            listOf("Azure", "Docker", "Wireshark", "Cisco Packet Tracer", "Git", "Java", "C", "Python", "Hugging Face", "SQL"))
     )
 
-    LazyColumn(modifier = Modifier.fillMaxSize().padding(10.dp)) {
+    LazyColumn(modifier = Modifier.fillMaxSize().padding(top=18.dp, bottom=10.dp, start = 10.dp, end = 10.dp)) {
         item {
             Text("Educación Formativa", fontSize = 24.sp, fontWeight = FontWeight.Bold)
             Text("Mi educación formativa", modifier = Modifier.padding(bottom = 16.dp))
@@ -377,16 +398,29 @@ fun EducationScreen() {
 
 // --- Screen 4: Soft Skills ---
 @Composable
-fun SoftSkillsScreen() {
-    val softSkills = listOf(
-        "Proactividad", "Flexibilidad", "Responsabilidad",
-        "Trabajo en equipo", "Actitud hacia el trabajo", "Inglés Básico"
+fun LanguagesAndSoftSkillsScreen() {
+    val languages = listOf(
+        "Español nativo", "Inglés básico (no acreditado)",
     )
 
-    Column(modifier = Modifier.fillMaxSize().padding(10.dp)) {
-        Text("Habilidades Interpersonales y otros", fontSize = 24.sp, fontWeight = FontWeight.Bold)
-        Text("Mis habilidades interpersonales y otras habilidades", modifier = Modifier.padding(vertical = 16.dp))
+    val softSkills = listOf(
+        "Actitud hacia el trabajo", "Trabajo en equipo", "Responsabilidad",
+    )
+
+    Column(modifier = Modifier.fillMaxSize().padding(top=18.dp, bottom=10.dp, start = 10.dp, end = 10.dp)) {
+        Text("Habilidades Interpersonales", fontSize = 24.sp, fontWeight = FontWeight.Bold)
+        Text("Mis habilidades interpersonales", modifier = Modifier.padding(vertical = 16.dp))
         DynamicGridTable(softSkills)
+
+        HorizontalDivider(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 10.dp, vertical = 26.dp)
+        )
+
+        Text("Idiomas", fontSize = 24.sp, fontWeight = FontWeight.Bold)
+        Text("Idiomas con los que me puedo comunicar", modifier = Modifier.padding(vertical = 16.dp))
+        DynamicGridTable(languages)
     }
 }
 
@@ -394,11 +428,11 @@ fun SoftSkillsScreen() {
 @Composable
 fun InterestsScreen() {
     val interests = listOf(
-        "Proxmox", "SeL4", "RISC-V", "ÁNGELES-CNI",
-        "Rust", "QubesOS", "NixOS", "GenAI"
+        "Proxmox", "Rust", "RISC-V",
+        "SeL4", "GenAI", "LLMs",
     )
 
-    Column(modifier = Modifier.fillMaxSize().padding(10.dp)) {
+    Column(modifier = Modifier.fillMaxSize().padding(top=18.dp, bottom=10.dp, start = 10.dp, end = 10.dp)) {
         Text("Intereses", fontSize = 24.sp, fontWeight = FontWeight.Bold)
         Text("Mis intereses, aquello a lo que dedico tiempo libre a aprender porque considero importante desde el punto de vista técnico en Ciberseguridad", modifier = Modifier.padding(vertical = 16.dp))
         DynamicGridTable(interests)
